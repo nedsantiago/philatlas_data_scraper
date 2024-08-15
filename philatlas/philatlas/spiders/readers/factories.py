@@ -9,7 +9,7 @@ class TableReaderFactory(object):
     """
 
     @classmethod
-    def get(self, table_id: str) -> callable:
+    def get_for(self, table_id: str) -> callable:
         """
         This method produces a reader function based on the provided string.
 

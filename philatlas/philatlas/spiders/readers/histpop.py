@@ -27,7 +27,7 @@ def histpop_reader(table_data: SelectorList) -> list:
     data = list()
     # get values in body
     for table_row in historical_population_body:
-        str_date = table_row.css("th").xpath("//time/@datetime").extract_first()
+        str_date = table_row.css("time::attr(datetime)").get()
         # convert date to date object
         date = datetime.date.fromisoformat(str_date)
         population = table_row.css("td::text")[0].get()
