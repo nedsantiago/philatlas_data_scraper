@@ -1,6 +1,6 @@
 import scrapy
 from time import sleep
-from .readers import factories
+from . import readers
 
 
 class PhilAtlasSpider(scrapy.Spider):
@@ -20,6 +20,7 @@ class PhilAtlasSpider(scrapy.Spider):
         sleep(2)
         # list of id's to find
         READ_TABLES = [
+            "households-table",
             "popByAgeGrpTable",
             "histPop"
             ]
@@ -28,7 +29,7 @@ class PhilAtlasSpider(scrapy.Spider):
         for table_id in READ_TABLES:
             # get table data
             raw_table = response.css(f"[id='{table_id}']")
-            table_reader = factories.TableReaderFactory.get_for(table_id)
+            table_reader = readers.factories.TableReaderFactory.get_for(table_id)
             try:
                 # add to dictionary
                 result_data[table_id] = table_reader(raw_table)

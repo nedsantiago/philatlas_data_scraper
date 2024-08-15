@@ -1,4 +1,4 @@
-from . import histpop
+from . import tables
 
 
 class TableReaderFactory(object):
@@ -26,9 +26,11 @@ class TableReaderFactory(object):
         # table id indicates what reader to use
         match table_id:
             case "histPop":
-                return histpop.read_history_population
+                return tables.read_history_population
             case "popByAgeGrpTable":
-                return histpop.read_age_group_population
+                return tables.read_raw_table
+            case "households-table":
+                return tables.read_raw_table
             
             # if no cases, raise an error
             case _:

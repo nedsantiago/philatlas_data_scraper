@@ -46,7 +46,7 @@ def read_history_population(table_data: SelectorList) -> list:
     return data
 
 
-def read_age_group_population(table_data: SelectorList) -> list:
+def read_raw_table(table_data: SelectorList) -> list:
     """
     This function reads the PhilAtlas Population Age Group Table and
     returns a list of dictionaries
@@ -59,7 +59,7 @@ def read_age_group_population(table_data: SelectorList) -> list:
 
     Example:
         >>> histpop_table = response.css("[id='histPop']")
-        >>> read_age_group_population(histpop_table)
+        >>> read_raw_table(histpop_table)
     """
 
     asrt_msg = f"Expected: {SelectorList}, Given: {type(table_data)}"
@@ -90,3 +90,4 @@ def read_age_group_population(table_data: SelectorList) -> list:
         data.append(row_dictionary)
 
     return data
+
