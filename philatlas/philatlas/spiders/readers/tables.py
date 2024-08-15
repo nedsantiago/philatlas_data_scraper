@@ -1,93 +1,112 @@
 import datetime
+from abc import ABC, abstractclassmethod
 from scrapy.selector.unified import SelectorList
 
 
-def read_history_population(table_data: SelectorList) -> list:
+class TableReader(ABC):
     """
-    This function reads the PhilAtlas Historical Population Table and
-    returns a list of dictionaries
-
-    Arguments:
-        table_data: HTML table as a result of the response.css method
-
-    Returns:
-        A list of dictionaries that can be fed into a pandas dataframe
-
-    Example:
-        >>> histpop_table = response.css("[id='histPop']")
-        >>> read_history_population(histpop_table)
+    This class collects all functions/methods realted to reading tables
+    from the PhilAtlas website.
     """
 
-    asrt_msg = f"Expected: {SelectorList}, Given: {type(table_data)}"
-    assert type(table_data) is SelectorList, asrt_msg
+    @classmethod
+    def read_raw_table(self, table_data: SelectorList) -> list:
+        """
+        This method reads the PhilAtlas Population Age Group Table and
+        returns a list of dictionaries
 
-    # parse for header
-    historical_population_headers = table_data.css("thead").css("th::text").getall()
-    # parse for body
-    historical_population_body = table_data.css("tbody").css("tr")
+        Arguments:
+            table_data: HTML table as a result of the response.css method
 
-    # initialize the table output as list of dictionaries
-    data = list()
-    # get values in body
-    for table_row in historical_population_body:
+        Returns:
+            A list of dictionaries that can be fed into a pandas dataframe
+
+        Example:
+            >>> histpop_table = response.css("[id='histPop']")
+            >>> TableReader.read_raw_table(histpop_table)
+        """
+
+        asrt_msg = f"Expected: {SelectorList}, Given: {type(table_data)}"
+        assert type(table_data) is SelectorList, asrt_msg
+
+        # parse for header
+        headers = self.get_table_headers(table_data)
+        # parse for body
+        body = self.get_table_body(table_data)
+
+        # initialize the table output as list of dictionaries
+        data = list()
+        # get values in body
+        for table_row in body:
+            row_dictionary = dict()
+            # append the header in row
+            row_header = self.get_body_row_header(table_row)
+            # append the data in row
+            row_data = self.get_body_row_data(table_row)
+
+            # recreate row as a dictionary 
+            # first column
+            row_dictionary[headers[0]] = row_header
+            # other columns
+            for i in range(1, len(headers)):
+                row_dictionary[headers[i]] = row_data[i - 1]
+            # append the dictionary to data
+            data.append(row_dictionary)
+
+        return data
+    
+    @abstractclassmethod
+    def get_table_headers(cls, table_data):
+        raise NotImplementedError
+
+    @abstractclassmethod
+    def get_table_body(cls, table_data):
+        raise NotImplementedError
+
+    @abstractclassmethod
+    def get_body_row_header(cls, table_row):
+        raise NotImplementedError
+
+    @abstractclassmethod
+    def get_body_row_data(cls, table_row):
+        raise NotImplementedError
+    
+
+class RawTableReader(TableReader):
+    @classmethod
+    def get_table_headers(cls, table_data):
+        return table_data.css("thead").css("th::text").getall()
+
+    @classmethod
+    def get_table_body(cls, table_data):
+        return table_data.css("tbody").css("tr")
+
+    @classmethod
+    def get_body_row_header(cls, table_row):
+        return table_row.css("th::text").get()
+
+    @classmethod
+    def get_body_row_data(cls, table_row):
+        return table_row.css("td::text").getall()
+    
+
+class DateTableReader(TableReader):
+    @classmethod
+    def get_table_headers(cls, table_data):
+        return table_data.css("thead").css("th::text").getall()
+
+    @classmethod
+    def get_table_body(cls, table_data):
+        return table_data.css("tbody").css("tr")
+
+    @classmethod
+    def get_body_row_header(cls, table_row):
+        # convert row header into a date object
         str_date = table_row.css("time::attr(datetime)").get()
         # convert date to date object
         date = datetime.date.fromisoformat(str_date)
-        population = table_row.css("td::text")[0].get()
-        population_increase = table_row.css("td::text")[1].get()
+        return date
 
-        # append the row header then all row data
-        data.append({
-            historical_population_headers[0] : date,
-            historical_population_headers[1] : population,
-            historical_population_headers[2] : population_increase
-            })
-    
-    return data
-
-
-def read_raw_table(table_data: SelectorList) -> list:
-    """
-    This function reads the PhilAtlas Population Age Group Table and
-    returns a list of dictionaries
-
-    Arguments:
-        table_data: HTML table as a result of the response.css method
-
-    Returns:
-        A list of dictionaries that can be fed into a pandas dataframe
-
-    Example:
-        >>> histpop_table = response.css("[id='histPop']")
-        >>> read_raw_table(histpop_table)
-    """
-
-    asrt_msg = f"Expected: {SelectorList}, Given: {type(table_data)}"
-    assert type(table_data) is SelectorList, asrt_msg
-
-    # parse for header
-    headers = table_data.css("thead").css("th::text").getall()
-    # parse for body
-    body = table_data.css("tbody").css("tr")
-
-    # initialize the table output as list of dictionaries
-    data = list()
-    # get values in body
-    for table_row in body:
-        row_dictionary = dict()
-        # append the header in row
-        row_header = table_row.css("th::text").get()
-        # append the data in row
-        row_data = table_row.css("td::text").getall()
-
-        # recreate row as a dictionary 
-        # first column
-        row_dictionary[headers[0]] = row_header
-        # other columns
-        for i in range(1, len(headers)):
-            row_dictionary[headers[i]] = row_data[i - 1]
-        # append the dictionary to data
-        data.append(row_dictionary)
-
-    return data
-
+    @classmethod
+    def get_body_row_data(cls, table_row):
+        return table_row.css("td::text").getall()

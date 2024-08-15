@@ -26,11 +26,13 @@ class TableReaderFactory(object):
         # table id indicates what reader to use
         match table_id:
             case "histPop":
-                return tables.read_history_population
+                # initialize the reader
+                return tables.DateTableReader.read_raw_table
             case "popByAgeGrpTable":
-                return tables.read_raw_table
+                return tables.RawTableReader.read_raw_table
             case "households-table":
-                return tables.read_raw_table
+                # initialize the reader
+                return tables.DateTableReader.read_raw_table
             
             # if no cases, raise an error
             case _:
