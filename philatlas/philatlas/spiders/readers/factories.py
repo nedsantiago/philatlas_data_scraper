@@ -1,4 +1,4 @@
-from . import tables
+from . import tables, ibox
 
 
 class TableReaderFactory(object):
@@ -33,6 +33,9 @@ class TableReaderFactory(object):
             case "households-table":
                 # initialize the reader
                 return tables.DateTableReader.read_raw_table
+            case "table.iBox":
+                # initialize the reader
+                return ibox.read_ibox
             
             # if no cases, raise an error
             case _:

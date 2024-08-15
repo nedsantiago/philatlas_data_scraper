@@ -18,6 +18,15 @@ class PhilAtlasSpider(scrapy.Spider):
     def parse(self, response):
         # delay the parsing to reduce burden at PhilAtlas server
         sleep(2)
+        # initalize dictionary
+        result_data = dict()
+        # get summary data
+        SUMMARY_TABLE_ID = "table.iBox"
+        table_reader = readers.factories.TableReaderFactory.get_for(SUMMARY_TABLE_ID)
+        summary = table_reader(response.css(SUMMARY_TABLE_ID))
+
+        result_data["summary"] = summary
+
         # list of id's to find
         READ_TABLES = [
             "households-table",
@@ -25,7 +34,6 @@ class PhilAtlasSpider(scrapy.Spider):
             "histPop"
             ]
         # result data
-        result_data = dict()
         for table_id in READ_TABLES:
             # get table data
             raw_table = response.css(f"[id='{table_id}']")
