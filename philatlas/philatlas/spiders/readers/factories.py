@@ -1,4 +1,3 @@
-import scrapy
 from . import histpop
 
 
@@ -27,7 +26,9 @@ class TableReaderFactory(object):
         # table id indicates what reader to use
         match table_id:
             case "histPop":
-                return histpop.histpop_reader
+                return histpop.read_history_population
+            case "popByAgeGrpTable":
+                return histpop.read_age_group_population
             
             # if no cases, raise an error
             case _:

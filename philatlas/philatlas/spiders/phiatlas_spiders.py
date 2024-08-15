@@ -18,10 +18,21 @@ class PhilAtlasSpider(scrapy.Spider):
     def parse(self, response):
         # delay the parsing to reduce burden at PhilAtlas server
         sleep(2)
-        table_id = "histPop"
-        # find historical population table
-        historical_population_table = response.css(f"[id='{table_id}']")
-        table_reader = factories.TableReaderFactory.get_for(table_id)
-        yield {
-            table_id : table_reader(historical_population_table)
-            }
+        # list of id's to find
+        READ_TABLES = [
+            "popByAgeGrpTable",
+            "histPop"
+            ]
+        # result data
+        result_data = dict()
+        for table_id in READ_TABLES:
+            # get table data
+            raw_table = response.css(f"[id='{table_id}']")
+            table_reader = factories.TableReaderFactory.get_for(table_id)
+            try:
+                # add to dictionary
+                result_data[table_id] = table_reader(raw_table)
+            except ValueError as e:
+                result_data[table_id] = []
+
+        yield result_data
