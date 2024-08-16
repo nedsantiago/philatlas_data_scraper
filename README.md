@@ -3,10 +3,15 @@
 #### Video Demo: <URL HERE>
 
 #### Description:
-Filipino consultants use [PhilAtlas](https://www.philatlas.com/) as a convenient source of demographic data in their analyses. However, manually gathering data is a low-value and monotonous task. This project uses the [Scrapy library](https://scrapy.org/) to automate the process demographic of data collection.
+Filipino consultants use [PhilAtlas](https://www.philatlas.com/) as a convenient source of demographic data in their analyses. However, manually gathering data is a low-value and monotonous task. This project uses the [Scrapy library](https://scrapy.org/) to automate the process demographic of data collection. The project features:
+* Link Following
+* JSON data exporting
+* Object Oriented Programming - Factory (see philatlas\spiders\readers\factories.py)
+* Object Oriented Programming - Abstract Factory (see philatlas\spiders\readers\factories.py)
+* Five (5) second sleep per query to prevent overloading servers
 
 ## 🧑🏽‍💻 Author
-### Ned Santiago  📞+63 (917) 890 5173  ✉️ [nedsantiago@tutanota.com](mailto:nedsantiago@tutanota.com)
+### Ned Santiago
 
 ## 🎯 Purpose
 
@@ -14,20 +19,14 @@ When conducting environmental-social consultancy work, gathering a location's de
 
 ## 📖 Documentation
 
-#### 📦Setup
+### ⚡Usage
 
 For Windows
 ```
-py -m pip install [python file here]
+python project.py [HTML URL]
 ```
 For Linux
 ```
-python3 -m pip install [python file here]
+python3 project.py [URL HERE]
 ```
-
-
-### ⚡Usage
-#### For exporting flooding flow rate data
-1) ...
-5) Done!
 

@@ -10,14 +10,18 @@
 # Due to the nature of the Scrapy module, implementing pytests was limited
 # since restarting the scrapy is not allowed by the module itself.
 
-import scrapy
 from scrapy.crawler import CrawlerProcess
 from philatlas.spiders import philatlas_spiders
+import sys
 
 
 def main():
+    if len(sys.argv) != 2:
+        sys.exit("Usage: python -m scrapy philatlas [PhilAtlas]")
+    else:
+        url = sys.argv[1]
     # scrape for aguho
-    scrape_aguho()
+    scrape(url)
 
 
 def scrape(urls: str):
