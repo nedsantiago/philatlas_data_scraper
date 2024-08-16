@@ -4,12 +4,12 @@ import json
 
 
 SCRAPE_VALIDATION_TESTS = [
-    (r"./tests/data/rosario/Rosario, Pasig Profile – PhilAtlas.htm", r"./tests/data/rosario/rosario.json")
+    (r"C:\Users\admin\01Hobby\cs50\cs50p\final_project\tests\data\rosario\Rosario, Pasig Profile – PhilAtlas.htm", r"./tests/data/rosario/rosario.json")
 ]
 
 @pytest.mark.parametrize("input, label", SCRAPE_VALIDATION_TESTS)
 def test_scrape(input, label):
-    urls = [input]
+    urls = input
     with open(label) as json_file:
         # run the scrape on the input data
         result = project.scrape(urls)
