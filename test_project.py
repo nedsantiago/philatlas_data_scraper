@@ -23,6 +23,6 @@ def test_scrape(input, label):
             f"[OUTPUT]\n"
             f"{result}"
             )
-        if result == label_data:
+        if result != label_data:
             raise AssertionError(asrt_msg)
 
