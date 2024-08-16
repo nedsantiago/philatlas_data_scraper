@@ -11,9 +11,7 @@ class PhilAtlasSpider(scrapy.Spider):
     """
 
     name = "philatlas"
-    start_urls = [
-       "https://www.philatlas.com/luzon/ncr/pasig.html"
-    ]
+    start_urls = list()
 
     def parse(self, response):
         # delay the parsing to reduce burden at PhilAtlas server

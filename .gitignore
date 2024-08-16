@@ -1,6 +1,7 @@
 # MY GIT IGNORES
 venv/
 tests/data/*/
+*.jsonl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
