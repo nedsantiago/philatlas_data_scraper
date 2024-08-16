@@ -1,6 +1,7 @@
 # PhilAtlas Data Scraper
 
-#### Video Demo: <URL HERE>
+#### Video Demo: https://youtu.be/H82yLyQt-LA
+[Clickable Link](https://youtu.be/H82yLyQt-LA)
 
 #### Description:
 Filipino consultants use [PhilAtlas](https://www.philatlas.com/) as a convenient source of demographic data in their analyses. However, manually gathering data is a low-value and monotonous task. This project uses the [Scrapy library](https://scrapy.org/) to automate the process demographic of data collection. The project features:
