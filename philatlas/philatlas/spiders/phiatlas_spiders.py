@@ -12,12 +12,12 @@ class PhilAtlasSpider(scrapy.Spider):
 
     name = "philatlas"
     start_urls = [
-       "https://www.philatlas.com/luzon/ncr/pasig/rosario.html"
+       "https://www.philatlas.com/luzon/ncr/pasig.html"
     ]
 
     def parse(self, response):
         # delay the parsing to reduce burden at PhilAtlas server
-        sleep(2)
+        sleep(5)
         # initalize dictionary
         result_data = dict()
         # get summary data
@@ -25,6 +25,7 @@ class PhilAtlasSpider(scrapy.Spider):
         table_reader = readers.factories.TableReaderFactory.get_for(SUMMARY_TABLE_ID)
         summary = table_reader(response.css(SUMMARY_TABLE_ID))
 
+        result_data["name"] = response.css("h1::text").get()
         result_data["summary"] = summary
 
         # list of id's to find
@@ -45,3 +46,11 @@ class PhilAtlasSpider(scrapy.Spider):
                 result_data[table_id] = []
 
         yield result_data
+
+        # find what to add to list
+        self.start_urls = self.start_urls + list(response.css("th").css("a::attr(href)").getall())
+
+        print(f"Remaining urls to go through:\n[START LIST]\n{self.start_urls}\n[END LIST]")
+        next_page = self.start_urls.pop()
+        if next_page is not None:
+            yield response.follow(next_page, callback=self.parse)

@@ -41,3 +41,4 @@ class TableReaderFactory(object):
             case _:
                 err_msg = f"No reader for table with id={table_id}"
                 raise ValueError(err_msg)
+            
