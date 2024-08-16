@@ -1,20 +1,27 @@
 import project
 import pytest
 import json
+import logging
 
 
 SCRAPE_VALIDATION_TESTS = [
-    (r"C:\Users\admin\01Hobby\cs50\cs50p\final_project\tests\data\rosario\Rosario, Pasig Profile – PhilAtlas.htm", r"./tests/data/rosario/rosario.json")
+    (r"https://www.philatlas.com/luzon/ncr/pasig/rosario.html", r"./tests/data/rosario/rosario.json")
 ]
 
 @pytest.mark.parametrize("input, label", SCRAPE_VALIDATION_TESTS)
 def test_scrape(input, label):
-    urls = input
-    with open(label) as json_file:
+    # erase data from output file
+    open('output.jsonl', 'w').close()
+    logger = logging.getLogger(__name__)
+    url = input
+
+    with open(label, "r", encoding="utf-8") as json_file:
         # run the scrape on the input data
-        result = project.scrape(urls)
+        project.scrape(url)
         # load the label (expected results) data
         label_data = json.load(json_file)
+    with open("output.jsonl", "r", encoding="utf-8") as output_file:
+        result = json.load(output_file)
         # compare
         asrt_msg = (
             f"Result did not match expected data\n"
@@ -24,5 +31,5 @@ def test_scrape(input, label):
             f"{result}"
             )
         if result != label_data:
+            logger.critical(asrt_msg)
             raise AssertionError(asrt_msg)
-

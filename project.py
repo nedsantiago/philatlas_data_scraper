@@ -29,6 +29,3 @@ def scrape(urls: str):
     )
     process.crawl(ASpider)
     process.start()
-
-
-scrape("https://www.philatlas.com/mindanao/r11/davao-del-sur/hagonoy/leling.html")
