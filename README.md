@@ -1,7 +1,6 @@
 # PhilAtlas Data Scraper
 
-#### Video Demo: https://youtu.be/H82yLyQt-LA
-[Clickable Link](https://youtu.be/H82yLyQt-LA)
+#### Video Demo: [PhilAtlas Data Scraper](https://youtu.be/H82yLyQt-LA)
 
 #### Description:
 
@@ -58,4 +57,3 @@ For Linux
 ```
 python3 project.py [URL HERE]
 ```
-
